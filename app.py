@@ -50,9 +50,9 @@ def rule_inference(suhu_opt, lembap_opt, angin_opt, komoditas):
     r, s, t = lembap_opt
     ap, ak = angin_opt
     
-    sangat_cocok = 0
-    cukup_cocok = 0
-    tidak_cocok = 0
+    sangatcocok = 0
+    cukupcocok = 0
+    tidakcocok = 0
     
     if komoditas == "Padi (Rentan Angin Kencang/Roboh)":
         r1 = min(n, t, ap) 
@@ -62,9 +62,9 @@ def rule_inference(suhu_opt, lembap_opt, angin_opt, komoditas):
         r5 = min(p, r, ap) 
         r6 = min(p, t, ak) 
         
-        sangat_cocok = max(r1, r3)
-        cukup_cocok = max(r2, r4)
-        tidak_cocok = max(r5, r6)
+        sangatcocok = max(r1, r3)
+        cukupcocok = max(r2, r4)
+        tidakcocok = max(r5, r6)
         
     elif komoditas == "Palawija / Jagung (Butuh Air Sedang)":
         r1 = min(n, s, ap) 
@@ -73,9 +73,9 @@ def rule_inference(suhu_opt, lembap_opt, angin_opt, komoditas):
         r4 = min(p, r, ap) 
         r5 = min(n, s, ak) 
         
-        sangat_cocok = r1
-        cukup_cocok = max(r2, r3, r5)
-        tidak_cocok = r4
+        sangatcocok = r1
+        cukupcocok = max(r2, r3, r5)
+        tidakcocok = r4
         
     else: # Hortikultura / Sayuran
         r1 = min(d, s, ap) 
@@ -83,16 +83,16 @@ def rule_inference(suhu_opt, lembap_opt, angin_opt, komoditas):
         r3 = min(p, t, ap) 
         r4 = min(n, s, ak) 
         
-        sangat_cocok = max(r1, r2)
-        cukup_cocok = r4
-        tidak_cocok = r3
+        sangatcocok = max(r1, r2)
+        cukupcocok = r4
+        tidakcocok = r3
 
     w_tidak, w_cukup, w_sangat = 25, 60, 90
-    total_bobot = tidak_cocok + cukup_cocok + sangat_cocok
+    total_bobot = tidakcocok + cukupcocok + sangatcocok
     
     if total_bobot == 0: return 50, "Cukup Cocok"
     
-    skor = ((tidak_cocok * w_tidak) + (cukup_cocok * w_cukup) + (sangat_cocok * w_sangat)) / total_bobot
+    skor = ((tidakcocok * w_tidak) + (cukupcocok * w_cukup) + (sangatcocok * w_sangat)) / total_bobot
     
     if skor < 45: status = "Tidak Cocok"
     elif skor < 75: status = "Cukup Cocok"
@@ -281,7 +281,7 @@ elif menu == "Eksplorasi Data & Tren":
         fig_timeline = plot_time_series(df_cuaca, is_dark_theme)
         st.pyplot(fig_timeline)
     with tab2:
-        st.dataframe(df_cuaca[['dt_iso', 'temp', 'humidity', 'wind_speed', 'Skor_Kelayakan', 'Rekomendasi']], use_container_width=True)
+        st.dataframe(df_cuaca[['dt_iso', 'temp', 'humidity', 'wind_speed', 'Skor_Kelayakan', 'Rekomendasi']], width="stretch")
 
 # --- MENU 3: SIMULASI FIS INTERAKTIF ---
 elif menu == "Simulasi FIS Interaktif":
